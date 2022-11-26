@@ -17,3 +17,8 @@ npm install
 3. 可以在客户端连接状态尝试连接，提示已连接。
 4. 可以断开客户端的连接。
 5. 可以发送请求来断开服务端的 WSS 服务。 弹窗提示后，再次点击断开客户端连接，查看控制台。
+
+## 文档参考
+https://www.npmjs.com/package/ws
+https://github.com/websockets/ws/blob/master/doc/ws.md
+https://blog.csdn.net/qq_32442973/article/details/120249959
