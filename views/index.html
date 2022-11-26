@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="message" />
+    <button id="send">发送消息</button>
+    <button id="connect">建立连接</button>
+    <button id="closeClient">关闭客户端连接</button>
+    <button id="closeServer">关闭服务端连接</button>
+    <script>
+      let ws = null;
+      function runWebsocket() {
+        if (ws?.readyState === 1) {
+          console.log("连接已存在，不重新建立");
+          return;
+        }
+        ws = new WebSocket("ws://localhost:9000");
+        ws.onopen = (e) => {
+          console.log("客户端连接建立");
+        };
+        ws.onmessage = (messageEvent) => {
+          console.log("客户端收到数据", messageEvent.data);
+        };
+        ws.onerror = (event) => {
+          console.log("客户端通信发生错误");
+        };
+        ws.onclose = (closeEvent) => {
+          console.log("客户端连接关闭");
+        };
+      }
+
+      runWebsocket();
+
+      document.getElementById("send").addEventListener("click", function () {
+        const message = document.getElementById("message").value;
+        console.log("客户端要发生的信息是：", message);
+        ws.send(message);
+      });
+
+      document.getElementById("connect").addEventListener("click", function () {
+        runWebsocket();
+      });
+
+      document
+        .getElementById("closeClient")
+        .addEventListener("click", function () {
+          ws.close();
+        });
+
+      document
+        .getElementById("closeServer")
+        .addEventListener("click", async function () {
+          await fetch("http://127.0.0.1:3000/closeWSS");
+          alert(
+            "服务端WSS已关闭, 但是只有所有客户端关闭连接才会触发服务端的close回调。 尝试关闭客户端连接。"
+          );
+        });
+    </script>
+  </body>
+</html>
